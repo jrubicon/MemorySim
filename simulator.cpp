@@ -1,0 +1,177 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <queue>
+#include <string>
+using namespace std;
+
+class Process
+{
+public:
+	Process(int pid, int arrivalTime, int runTime, vector<int> memVector)
+	:pid_(pid), arrivalTime_(arrivalTime), runTime_(runTime), memVector_(memVector) 
+	{
+		int c = 0;
+		for(int i = 0; i < memVector_.size(); i++)
+		{
+			c += memVector_[i];
+		}
+		totalMem_ = c;
+	}
+
+	int pagesRequired(int pageSize)
+	{
+		if(totalMem_ % pageSize != 0)
+		{
+		return (totalMem_ / pageSize) + 1;
+		}
+		return totalMem_ / pageSize;
+	}
+
+	int findPage(int pageNumInMap)
+	{
+		for(int i = 0; i < pagesUsed_.size(); i++)
+		{
+			if(pagesUsed_[i] == pageNumInMap)
+			{
+				return i + 1;
+			}
+		}
+		return -1;
+	}
+
+private:
+	int pid_;
+	int arrivalTime_;
+	int runTime_;
+	int doneTime_;
+	int totalMem_;
+	vector<int> memVector_;
+	vector<int> pagesUsed_;
+}
+
+struct MemEntry
+{
+	Process proc_;
+	bool add_;
+	MemEntry(Process p, bool b)
+	{
+		proc_ = p;
+		add_ = b;
+	}
+}
+
+/*
+class Sim
+{
+
+private:
+	int maxMem_;
+	int pageSize_
+	int availablePages_;
+
+}
+*/
+
+int main()
+{
+	int maxMem_;
+	int pageSize_;
+	int availablePageCount_
+	vector<int> pageVector_;
+	queue<int> inputQueue_;
+	vector<Process> processVector_;
+	map<int, list<pair<bool, int>>> memEvents_;
+
+
+	cout << "Enter memory size: ";
+	cin >> maxMem;
+	cout << "Enter page size 1 = 100, 2 = 200, 3 = 400";
+	cin >> pageSize;
+
+	while(pageSize > 3 || pageSize < 1)
+	{
+		cout << "Invalid page size entry: try again";
+		cin >> pageSize;
+	}
+
+
+
+	//reading the file
+	ifstream input("in1.txt");
+	if(!input.is_open)
+	{
+		cout << "could not read file"
+		return 0;
+	}
+
+	int numProcesses;
+
+	int tempPid;
+	int tempArrivalTime;
+	int tempRunTime;
+	int tempChunkCount;
+	vector<int> tempMemVector;
+
+	file >> numProcesses;
+
+
+	for(int i = 0; i < numProcesses; i++)
+	{
+		file >> tempPid;
+		file >> tempArrivalTime;
+		file >> tempRunTime;
+		file >> tempChunkCount;
+		for(int j = 0; j < tempChunkCount; j++)
+		{
+			int chunk;
+			file >> chunk;
+			tempMemVector.push_back(n);
+		}
+		processList.push_back(Process(tempPid, tempArrivalTime, tempRunTime, tempMemVector));
+
+		int pNum = processList.size() -1;
+
+		//add event function
+		MemEntry m = new MemEntry(pnum, true); //this stuff might have to all go in the for loop. im actually positive it does
+		list<MemEntry> mList = {m};
+		pair<map<int,list<MemEntry>>::iterator, bool> mem = events.insert(pair<int,list<MemEntry>>(tempArrivalTime,mList)); 
+		//insert returns a pair of (iterator to the inserted elemdent, boolean of whether it was inserted correctly or not. returns false if element already exists)
+		//returns false if an equivalent key is already in the table
+		//keys for this insert is arrival time
+		if(!mem.second) //if the entry is already inside of events. if an event with the same arrival time already exists
+		{
+			mem.first.second.push_back(m); //put it in the list, since it didnt get put in last time
+		}
+
+	}
+
+	int t = 0;
+
+	while(t < 999999 && events.size() != 0)
+	{
+		if( t == events.begin()->first) // if any events are at time t
+		{
+			cout << "t = " << t << ": ";
+			while(events.begin()->second.size() != 0)
+			{
+				MemEntry act = events.begin()->second.front();
+				if (action.first)
+				{
+					enqueue(action.second);
+				}
+				else
+				{
+					MM_remove(action.second, t);
+				}
+				events.begin()->second.pop_front();
+			}
+			events.erase(events.begin());
+		}
+		load_from_queue(t);
+		t += 100;
+	}
+	
+
+
+}
