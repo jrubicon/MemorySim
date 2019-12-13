@@ -60,17 +60,67 @@ struct MemEntry
 		add_ = b;
 	}
 }
-
-/*
-class Sim
-{
+class Simulation {
 private:
-	int maxMem_;
-	int pageSize_
-	int availablePages_;
-}
-*/
+	vector<int> memMap; //virtual pages
+	list<int> inputQueue; // processes index in process_list
+	vector<Process> processVector;
+	Map<int, list<MemEntry>> memEvents; // time , TRUE = ADD / FALSE = remove, PID
+	int availablePageCount;
+	int maxMem;
+	int pageSize;
+public:
+	Simulation(int mem_size, int size) {
+		maxMem = mem_size;
+		if (size == 1) pageSize = 100;
+		else if (size == 2) pageSize = 200;
+		else pageSize = 400;
+		availablePageCount = maxMem / pageSize;
+		memMap = vector<int>(availablePageCount, -1);
+	}
 
+// Add_event
+	
+//mm_add
+	
+	void MM_add(int mm_add, int time) {
+		cout << "\tMemory Management moves Process " << mm_add + 1 << " to memory" << endl << "\t";
+		
+		int size = processVector[mm_add].pagesRequired(pageSize);
+		
+		availablePageCount -= size;
+		int k = 0;
+
+		while (size > 0) {
+			if (memMap[k] == -1) {
+				memMap[k] = mm_add;
+				processVector[mm_add].pagesUsed_.push_back(k);
+			}
+			k++;
+		}
+		add_event(mm_add, time + processVector[mm_add].runtime, false);
+	}
+  // mm_remove
+	void MM_remove(int j, int l) {
+		cout << "Process " << j + 1 << " completes" << endl << "\t";
+		
+		processVector[j].doneTime_ = l;
+		int size = processVector[j].pagesUsed.size();
+		for (i = 0; i < size; i++)
+			memMap[processVector][j].pagesUsed[i]] = -1;
+			availablePageCount += size;
+			print_mem();
+	}
+ // enque
+	void enque(int k) {
+		cout << "Process " << k + 1 << " arrives" << endl << "\t";
+		queue.push_back(k);
+		print_queue();
+	}
+
+
+
+};
 int main()
 {
 	int maxMem_;
@@ -143,42 +193,7 @@ int main()
 		}
 
 	}
-	//mm_add
 	
-	void MM_add(int mm_add, int time) {
-		cout << "\tMemory Management moves Process " << mm_add + 1 << " to memory" << endl << "\t";
-		
-		int size = processVector[mm_add].pagesRequired(pageSize);
-		
-		availablePageCount -= size;
-		int k = 0;
-
-		while (size > 0) {
-			if (memMap[k] == -1) {
-				memMap[k] = mm_add;
-				processVector[mm_add].pagesUsed_.push_back(k);
-			}
-			k++;
-		}
-		add_event(mm_add, time + processVector[mm_add].runtime, false);
-	}
-  // mm_remove
-	void MM_remove(int j, int l) {
-		cout << "Process " << j + 1 << " completes" << endl << "\t";
-		
-		processVector[j].doneTime_ = l;
-		int size = processVector[j].pagesUsed.size();
-		for (i = 0; i < size; i++)
-			memMap[processVector][j].pagesUsed[i]] = -1;
-			availablePageCount += size;
-			print_mem();
-	}
- // enque
-	void enque(int k) {
-		cout << "Process " << k + 1 << " arrives" << endl << "\t";
-		queue.push_back(k);
-		print_queue();
-	}
 
 	int t = 0;
 
