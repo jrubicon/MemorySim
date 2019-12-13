@@ -70,7 +70,7 @@ public:
 		memMap = vector<int>(freePages, -1);
 	}
 
-	bool read_file(string& path) {
+	bool read_file(const string& path) {
 		ifstream file("in1.txt");
 		if (!file.is_open()) {
 			cout << "Can not open the file: " << "in1.txt" << endl;
