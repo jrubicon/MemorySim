@@ -160,6 +160,7 @@ int main()
 			}
 			k++;
 		}
+		add_event(mm_add, time + processVector[mm_add].runtime, false);
 	}
   // mm_remove
 	void MM_remove(int j, int l) {
@@ -170,11 +171,13 @@ int main()
 		for (i = 0; i < size; i++)
 			memMap[processVector][j].pagesUsed[i]] = -1;
 			availablePageCount += size;
+			print_mem();
 	}
  // enque
 	void enque(int k) {
 		cout << "Process " << k + 1 << " arrives" << endl << "\t";
 		queue.push_back(k);
+		print_queue();
 	}
 
 	int t = 0;
