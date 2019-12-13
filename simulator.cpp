@@ -9,10 +9,10 @@ class Process
 {
 public:
 	Process(int pid, int arrivalTime, int runTime, vector<int> memVector)
-	:pid_(pid), arrivalTime_(arrivalTime), runTime_(runTime), memVector_(memVector) 
+		:pid_(pid), arrivalTime_(arrivalTime), runTime_(runTime), memVector_(memVector)
 	{
 		int c = 0;
-		for(int i = 0; i < memVector_.size(); i++)
+		for (int i = 0; i < memVector_.size(); i++)
 		{
 			c += memVector_[i];
 		}
@@ -21,18 +21,18 @@ public:
 
 	int pagesRequired(int pageSize)
 	{
-		if(totalMem_ % pageSize != 0)
+		if (totalMem_ % pageSize != 0)
 		{
-		return (totalMem_ / pageSize) + 1;
+			return (totalMem_ / pageSize) + 1;
 		}
 		return totalMem_ / pageSize;
 	}
 
 	int findPage(int pageNumInMap)
 	{
-		for(int i = 0; i < pagesUsed_.size(); i++)
+		for (int i = 0; i < pagesUsed_.size(); i++)
 		{
-			if(pagesUsed_[i] == pageNumInMap)
+			if (pagesUsed_[i] == pageNumInMap)
 			{
 				return i + 1;
 			}
@@ -64,12 +64,10 @@ struct MemEntry
 /*
 class Sim
 {
-
 private:
 	int maxMem_;
 	int pageSize_
 	int availablePages_;
-
 }
 */
 
@@ -78,7 +76,7 @@ int main()
 	int maxMem_;
 	int pageSize_;
 	int availablePageCount_
-	vector<int> pageVector_;
+		vector<int> pageVector_;
 	queue<int> inputQueue_;
 	vector<Process> processVector_;
 	map<int, list<pair<bool, int>>> memEvents_;
@@ -89,7 +87,7 @@ int main()
 	cout << "Enter page size 1 = 100, 2 = 200, 3 = 400";
 	cin >> pageSize;
 
-	while(pageSize > 3 || pageSize < 1)
+	while (pageSize > 3 || pageSize < 1)
 	{
 		cout << "Invalid page size entry: try again";
 		cin >> pageSize;
@@ -99,10 +97,10 @@ int main()
 
 	//reading the file
 	ifstream input("in1.txt");
-	if(!input.is_open)
+	if (!input.is_open)
 	{
 		cout << "could not read file"
-		return 0;
+			return 0;
 	}
 
 	int numProcesses;
@@ -116,13 +114,13 @@ int main()
 	file >> numProcesses;
 
 
-	for(int i = 0; i < numProcesses; i++)
+	for (int i = 0; i < numProcesses; i++)
 	{
 		file >> tempPid;
 		file >> tempArrivalTime;
 		file >> tempRunTime;
 		file >> tempChunkCount;
-		for(int j = 0; j < tempChunkCount; j++)
+		for (int j = 0; j < tempChunkCount; j++)
 		{
 			int chunk;
 			file >> chunk;
@@ -130,30 +128,63 @@ int main()
 		}
 		processList.push_back(Process(tempPid, tempArrivalTime, tempRunTime, tempMemVector));
 
-		int pNum = processList.size() -1;
+		int pNum = processList.size() - 1;
 
 		//add event function
 		MemEntry m = new MemEntry(pnum, true); //this stuff might have to all go in the for loop. im actually positive it does
-		list<MemEntry> mList = {m};
-		pair<map<int,list<MemEntry>>::iterator, bool> mem = events.insert(pair<int,list<MemEntry>>(tempArrivalTime,mList)); 
+		list<MemEntry> mList = { m };
+		pair<map<int, list<MemEntry>>::iterator, bool> mem = events.insert(pair<int, list<MemEntry>>(tempArrivalTime, mList));
 		//insert returns a pair of (iterator to the inserted elemdent, boolean of whether it was inserted correctly or not. returns false if element already exists)
 		//returns false if an equivalent key is already in the table
 		//keys for this insert is arrival time
-		if(!mem.second) //if the entry is already inside of events. if an event with the same arrival time already exists
+		if (!mem.second) //if the entry is already inside of events. if an event with the same arrival time already exists
 		{
 			mem.first.second.push_back(m); //put it in the list, since it didnt get put in last time
 		}
 
 	}
+	//mm_add
+	
+	void MM_add(int mm_add, int time) {
+		cout << "\tMemory Management moves Process " << mm_add + 1 << " to memory" << endl << "\t";
+		
+		int size = processVector[mm_add].pagesRequired(pageSize);
+		
+		availablePageCount -= size;
+		int k = 0;
+
+		while (size > 0) {
+			if (memMap[k] == -1) {
+				memMap[k] = mm_add;
+				processVector[mm_add].pagesUsed_.push_back(k);
+			}
+			k++;
+		}
+	}
+  // mm_remove
+	void MM_remove(int j, int l) {
+		cout << "Process " << j + 1 << " completes" << endl << "\t";
+		
+		processVector[j].doneTime_ = l;
+		int size = processVector[j].pagesUsed.size();
+		for (i = 0; i < size; i++)
+			memMap[processVector][j].pagesUsed[i]] = -1;
+			availablePageCount += size;
+	}
+ // enque
+	void enque(int k) {
+		cout << "Process " << k + 1 << " arrives" << endl << "\t";
+		queue.push_back(k);
+	}
 
 	int t = 0;
 
-	while(t < 999999 && events.size() != 0)
+	while (t < 999999 && events.size() != 0)
 	{
-		if( t == events.begin()->first) // if any events are at time t
+		if (t == events.begin()->first) // if any events are at time t
 		{
 			cout << "t = " << t << ": ";
-			while(events.begin()->second.size() != 0)
+			while (events.begin()->second.size() != 0)
 			{
 				MemEntry act = events.begin()->second.front();
 				if (action.first)
@@ -171,7 +202,7 @@ int main()
 		load_from_queue(t);
 		t += 100;
 	}
-	
+
 
 
 }
