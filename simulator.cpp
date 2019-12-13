@@ -61,17 +61,36 @@ struct MemEntry
 	}
 }
 
-/*
-class Sim
+
+void printInputQueue(queue<int> q) //queue keeps its contents because it calls by value and not by reference
 {
-
-private:
-	int maxMem_;
-	int pageSize_
-	int availablePages_;
-
+	cout << "[";
+    while(!q.empty())
+    {
+        cout << q.front();
+        cout << " ";
+        q.pop();
+    }
+    cout << "]";
 }
-*/
+
+void printMemoryMap(vector<int> memMap, int pageSize)
+//memory map differs based on page size
+{
+	cout << "Memory Map: ";
+	for(int i = 0; i < memMap.size(); i++)
+	{
+		if(memMap[i] == -1) // if page is empty
+		{
+
+		}
+		else
+		{
+			cout << i * pageSize << " - " << i * pageSize + pageSize-1;
+			cout << ": Process " << memMap[i]+1 << ", Page " << processVector_[memMap[i]].findPage(i) << endl;
+		}
+	}
+}
 
 int main()
 {
@@ -98,8 +117,8 @@ int main()
 
 
 	//reading the file
-	ifstream input("in1.txt");
-	if(!input.is_open)
+	ifstream file("in1.txt");
+	if(!file.is_open)
 	{
 		cout << "could not read file"
 		return 0;
@@ -128,14 +147,16 @@ int main()
 			file >> chunk;
 			tempMemVector.push_back(n);
 		}
-		processList.push_back(Process(tempPid, tempArrivalTime, tempRunTime, tempMemVector));
+		Process tempProc = Process(tempPid, tempArrivalTime, tempRunTime, tempMemVector);
+		processVector_.push_back(tempProc);
 
-		int pNum = processList.size() -1;
+		int pNum = processVector_.size() -1;
 
 		//add event function
-		MemEntry m = new MemEntry(pnum, true); //this stuff might have to all go in the for loop. im actually positive it does
+		MemEntry m = new MemEntry(tempProc, true); //true means its going into the memory map
 		list<MemEntry> mList = {m};
-		pair<map<int,list<MemEntry>>::iterator, bool> mem = events.insert(pair<int,list<MemEntry>>(tempArrivalTime,mList)); 
+		pair<map<int,list<MemEntry>>::iterator, bool> mem = memEvents_.insert(pair<int,list<MemEntry>>(tempArrivalTime,mList)); 
+		//inserts a pair of when it arrived, and a list of processes that get added at that time
 		//insert returns a pair of (iterator to the inserted elemdent, boolean of whether it was inserted correctly or not. returns false if element already exists)
 		//returns false if an equivalent key is already in the table
 		//keys for this insert is arrival time
@@ -146,27 +167,43 @@ int main()
 
 	}
 
+	file.close()
+
 	int t = 0;
 
-	while(t < 999999 && events.size() != 0)
+	while(t < 999999 && memEvents_.size() != 0)
 	{
-		if( t == events.begin()->first) // if any events are at time t
+		if( t == memEvents_.begin()->first) // if any events are at time t
 		{
 			cout << "t = " << t << ": ";
-			while(events.begin()->second.size() != 0)
+			while(memEvents_.begin()->second.size() != 0) //iterates through the events of that t value
 			{
-				MemEntry act = events.begin()->second.front();
-				if (action.first)
+				MemEntry act = memEvents_.begin()->second.front(); //first MemEntry in List
+				if (act.bool_)//data type of act is MemEntry and second the bool is whether to add it or not
 				{
-					enqueue(action.second);
+					cout << "Process " << processVector_.size() << "to memory" << endl;
+					inputQueue_.push(processVector_.size()-1);
+					printInputQueue(inputQueue_);
+					//enqueue(action.second); act.first would be tempArrivTime
 				}
 				else
 				{
-					MM_remove(action.second, t);
+					//MM_remove(action.second, t);
+					cout << "Process " << processVector_.size() << "completes" << endl;
+					processVector_[processVector_.size()-1].doneTime_ = t;
+					for(int i = 0; i < processVector_[processVector_.size()-1].pagesUsed_.size(); i++)
+					{
+						pageVector_[processVector_[processVector_.size()-1].pagesUsed_[i]] = -1;
+					}
+					availablePageCount_ += processVector_[processVector_.size()-1].pagesUsed_.size();
+					//printMem()
+
+					//pop off front to remove it
+					memEvents_.begin()->second.pop_front();
 				}
-				events.begin()->second.pop_front();
+				 //after handling act it removes it by popping it off then repeats
 			}
-			events.erase(events.begin());
+			memEvents_.erase(memEvents_.begin());//erases first element of the map
 		}
 		load_from_queue(t);
 		t += 100;
