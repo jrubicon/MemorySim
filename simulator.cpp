@@ -22,8 +22,7 @@ struct MemEntry
 {
 	int pNum;
 	bool add;
-	MemEntry(bool a, int b)
-	{
+	MemEntry(bool a, int b){
 		add = a;
 		pNum = b;
 	}
