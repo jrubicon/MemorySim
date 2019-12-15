@@ -12,6 +12,6 @@
 
 * Design of program ("Design of Assignment2”)
 
-* Contribution
+## Coded by:
 * Code: Justin Drouin, Russell Guillermo, Calvin Nguyen
 * Design: Justin Drouin
