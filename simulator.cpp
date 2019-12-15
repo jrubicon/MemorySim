@@ -76,7 +76,7 @@ int main() {
 	bool pagesizecheck = 0;
 
 	
-	cout << endl << "Input page size: (100, 200, 400):";
+	cout << endl << "Input page size: (1:100,2: 200,3: 400):";
 	cin >> pageSize;
 	switch (pageSize) {
 	case 1:
@@ -86,7 +86,7 @@ int main() {
 		pageSize = 200;
 		break;
 	case 3:
-		pageSize = 300;
+		pageSize = 400;
 		break;
 	}
 
