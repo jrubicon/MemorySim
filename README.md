@@ -3,7 +3,7 @@
 ## Coded by:
 * Justin Drouin - jdrouin@csu.fullerton.edu
 * Russell Guillermo - rguillermo3@csu.fullerton.edu
-* Calvin Nguyen
+* Calvin Nguyen - cnguyen808@csu.fullerton.edu
 
 ### How To Run:
 1. Open Terminal
