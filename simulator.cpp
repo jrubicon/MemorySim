@@ -22,8 +22,7 @@ struct MemEntry
 {
 	int pNum;
 	bool add;
-	MemEntry(bool a, int b)
-	{
+	MemEntry(bool a, int b){
 		add = a;
 		pNum = b;
 	}
@@ -40,10 +39,10 @@ Process::Process(int pid_, int pArrivalTime_, int pRunTime_, const vector<int>& 
 int Process::pageRequired(int pageSize){
 	int total = 0;
 		for (int i = 0; i < memVector.size(); i++) {
-			total += memVector[i];
+			total = total + memVector[i];
 		}
 		if (total % pageSize > 0) {
-			total = total + pageSize;
+			total += pageSize;
 		}
 	int final = total / pageSize;
 	return final;
@@ -63,7 +62,6 @@ int Process::findPage(int temp) {
 
 int main() {
 	int avalablePageCount;
-	int maxMem;
 	int pageSize;
 	vector<int> memMap;
 	list<int> inputQueue;
@@ -75,28 +73,28 @@ int main() {
 	cin >> mem_size;
 	bool pagesizecheck = 0;
 
-	do {cout << endl << "Input page size: (100, 200, 400):";
+	do {
+		cout << endl << "Input page size: (100, 200, 400):";
 		cin >> pageSize;
-		if (pageSize != 100 || pageSize != 200 || pageSize != 400){
-			cout << "Invalid page size entry. Try again!\n";
-			pagesizecheck = 0;
-		}
-		if (pageSize == 100 || pageSize == 200 || pageSize == 400){
-			pagesizecheck = 1;
-		}
-	} while (pagesizecheck == 0);
+
+				if (pageSize != 100 || pageSize != 200 || pageSize != 400){
+					cout << "Invalid page size entry. Try again!\n";
+					pagesizecheck = 0;
+					}
+				if (pageSize == 100 || pageSize == 200 || pageSize == 400){
+					pagesizecheck = 1;
+				}
+		} while (pagesizecheck == 0);
 
 
-	maxMem = mem_size;
-	avalablePageCount = maxMem / pageSize;
+	avalablePageCount = mem_size / pageSize;
 	memMap = vector<int>(avalablePageCount, -1);
 
 	ifstream file("in1.txt");
 	if (!file.is_open()) {
-		cout << "Unable to open the file: " << "in1.txt" << endl;
+		cout << "Can not open the file: " << "in1.txt" << endl;
 		exit(0);
 	}
-
 	int pid, pArrivalTime_, pRunTime, counter, n, np;
 	file >> counter;
 	for (int i = 0; i < counter; i++) {
@@ -126,10 +124,11 @@ int main() {
 			while (memEvents.begin()->second.size() != 0) {
 				MemEntry trigger = memEvents.begin()->second.front();
 				if (trigger.add){  // if true, add to queue
-						cout << "Process " << trigger.pNum + 1 << " arrives" << "\n\t";
+						int pArrive = trigger.pNum + 1;
+						cout << "Process " << pArrive << " arrives" << "\n\t";
 						inputQueue.push_back(trigger.pNum);
-							list<int>::const_iterator frontIterator = inputQueue.cbegin();
-							list<int>::const_iterator endIterator = inputQueue.cend();
+							list<int>::const_iterator frontIterator = inputQueue.begin();
+							list<int>::const_iterator endIterator = inputQueue.end();
 
 							cout << "Input Queue:[ ";
 							while (frontIterator != endIterator) {
@@ -137,23 +136,26 @@ int main() {
 								frontIterator++;
 							}
 							cout << "]" << "\n\t";
-				}
+				}//
 				else {
 						// removing from memory map
-						cout << "Process " << trigger.pNum + 1 << " completes" << "\n\t";
+						int pComplete = trigger.pNum + 1;
+						cout << "Process " << pComplete << " completes" << "\n\t";
 						processVector[trigger.pNum].pEndTime = t;
-						int size = processVector[trigger.pNum].pagesUsed.size();
-						for (int i = 0; i < size; i++)
+						size_t size = processVector[trigger.pNum].pagesUsed.size();
+						for (size_t i = 0; i < size; i++)
 							memMap[processVector[trigger.pNum].pagesUsed[i]] = -1;
-						avalablePageCount += size;
+						avalablePageCount = avalablePageCount + size;
 
 						// printing memory
-							int mem_size = memMap.size();
+							size_t mem_size = memMap.size();
 							int head, tail;
 							cout << "Memory Map: ";
-							for (int i = 0; i < mem_size; i++) {
+							for (size_t i = 0; i < mem_size; i++) {
 								if (memMap[i] != -1) {
-									cout << i * pageSize << " - " << i * pageSize + pageSize -1 <<
+									int curPHead = i * pageSize;
+									int curPTail = i * pageSize + pageSize -1;
+									cout << i * curPHead << " - " << curPTail <<
 										": Process " << memMap[i] + 1 << ", Page " <<
 										processVector[memMap[i]].findPage(i) << "\n\t\t";
 								}
@@ -165,7 +167,9 @@ int main() {
 										i++;
 									}
 									i--;
-									cout << (head) * pageSize << " - " << (tail) * pageSize + pageSize - 1 << ": Free frame(s)" << "\n\t\t";
+									int pHead = head * pageSize;
+									int pTail = tail * pageSize + pageSize - 1;
+									cout << pHead << " - " << pTail << ": Free frame(s)" << "\n\t\t";
 								}
 							}
 							cout << endl;
@@ -180,7 +184,7 @@ int main() {
 				if (processVector[*frontIterator].pageRequired(pageSize) <= avalablePageCount) { //if enough space add to mem, if not check next
 
 						cout << "\tMM moves Process " << *frontIterator + 1 << " to memory" << "\n\t\t";
-						int size = processVector[*frontIterator].pageRequired(pageSize);
+						size_t size = processVector[*frontIterator].pageRequired(pageSize);
 						avalablePageCount -= size;
 						int i = 0;
 
@@ -189,7 +193,7 @@ int main() {
 								memMap[i] = *frontIterator;
 								processVector[*frontIterator].pagesUsed.push_back(i);
 								size--;
-							}
+							}//
 							i++;
 						}
 
@@ -217,17 +221,18 @@ int main() {
 						cout << "]" << "\n\t";
 					// end of printing queue
 
-						int mem_size = memMap.size();
+						size_t mem_size = memMap.size();
 						int head, tail;
 						cout << "Memory Map: ";
-						for (int i = 0; i < mem_size; i++) {
+						for (size_t i = 0; i < mem_size; i++) {
 							if (memMap[i] != -1) {
 								cout << i * pageSize << " - " << i * pageSize + pageSize -1 <<
 									": Process " << memMap[i] + 1 << ", Page " <<
 									processVector[memMap[i]].findPage(i) << "\n\t\t";
 							}
 							else { // loops to fill page
-								head = tail = i;
+								head = i;
+								tail = i;
 								while (i < mem_size && memMap[i] == -1) {
 									tail = i;
 									i++;
@@ -237,7 +242,7 @@ int main() {
 							}
 						}
 						cout << endl;
-					// end of print memory map
+					// end of print_mem
 				}
 				else
 					++frontIterator;
