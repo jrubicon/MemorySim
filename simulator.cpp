@@ -93,7 +93,7 @@ int main() {
 
 	ifstream file("in1.txt");
 	if (!file.is_open()) {
-		cout << "Can not open the file: " << "in1.txt" << endl;
+		cout << "Unable to open the file: " << "in1.txt" << endl;
 		exit(0);
 	}
 
