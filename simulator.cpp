@@ -229,8 +229,7 @@ int main() {
 									processVector[memMap[i]].findPage(i) << "\n\t\t";
 							}
 							else { // loops to fill page
-								head = i;
-								tail = i;
+								head = tail = i;
 								while (i < mem_size && memMap[i] == -1) {
 									tail = i;
 									i++;
