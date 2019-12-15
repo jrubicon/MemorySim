@@ -75,18 +75,16 @@ int main() {
 	cin >> mem_size;
 	bool pagesizecheck = 0;
 
-	do {
-		cout << endl << "Input page size: (100, 200, 400):";
+	do {cout << endl << "Input page size: (100, 200, 400):";
 		cin >> pageSize;
-
-				if (pageSize != 100 || pageSize != 200 || pageSize != 400){
-					cout << "Invalid page size entry. Try again!\n";
-					pagesizecheck = 0;
-					}
-				if (pageSize == 100 || pageSize == 200 || pageSize == 400){
-					pagesizecheck = 1;
-				}
-		} while (pagesizecheck == 0);
+		if (pageSize != 100 || pageSize != 200 || pageSize != 400){
+			cout << "Invalid page size entry. Try again!\n";
+			pagesizecheck = 0;
+		}
+		if (pageSize == 100 || pageSize == 200 || pageSize == 400){
+			pagesizecheck = 1;
+		}
+	} while (pagesizecheck == 0);
 
 
 	maxMem = mem_size;
