@@ -10,4 +10,4 @@
 2. g++ -std=c++14 simulator.cpp -o RunSim
 3. ./RunSim
 
-..* Design of program ("Design of Assignment2”)
+* Design of program ("Design of Assignment2”)
