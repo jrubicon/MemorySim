@@ -8,41 +8,13 @@ using namespace std;
 
 class Process {
 public:
-	int pid;
-	int	pArrivalTime;
-	int	pRunTime;
-	int	pEndTime;
+	int pid, pArrivalTime, pRunTime, pEndTime;
 	vector<int> memVector;
 	vector<int> pagesUsed;
 
-	Process(int pid_, int pArrivalTime_, int pRunTime_,
-		const vector<int>& memory_needed) {
-		pid = pid_;
-		pArrivalTime = pArrivalTime_;
-		pRunTime = pRunTime_;
-		memVector = memory_needed;
-	}
-
-	int pageRequired(int pageSize) const {
-		int total = 0;
-		for (size_t i = 0; i < memVector.size(); i++) {
-			total += memVector[i];
-		}
-		if (total % pageSize != 0) {
-			total += pageSize;
-		}
-		return total / pageSize;
-	} // end of pageRequired
-
-	int findPage(int m) {
-		for (size_t i = 0; i < pagesUsed.size(); i++) {
-			if (pagesUsed[i] == m) {
-				return i + 1;
-			}
-		}
-		return -1;
-	} // end of findPage
-	~Process() {}
+	Process(int, int, int, const vector<int>&);
+	int pageRequired(int);
+	int findPage(int);
 
 };
 
@@ -57,20 +29,39 @@ struct MemEntry
 	}
 };
 
-int main() {
-	int mem_size, page_size;
 
-	cout << "Input memory size: ";
-	cin >> mem_size;
-	cout << endl << "Input page size: (1:100, 2:200, 3:400)";
-	cin >> page_size;
+Process::Process(int pid_, int pArrivalTime_, int pRunTime_, const vector<int>& memory_needed) {
+	pid = pid_;
+	pArrivalTime = pArrivalTime_;
+	pRunTime = pRunTime_;
+	memVector = memory_needed;
+}
 
-	while(page_size < 1 || page_size > 3)
-	{
-		cout << "Invalid page size entry. Try again!\nInput page size: (1:100, 2:200, 3:400)";
-		cin >> page_size;
+int Process::pageRequired(int pageSize){
+	int total = 0;
+		for (int i = 0; i < memVector.size(); i++) {
+			total += memVector[i];
+		}
+		if (total % pageSize > 0) {
+			total = total + pageSize;
+		}
+	int final = total / pageSize;
+	return final;
+}
+
+int Process::findPage(int temp) {
+	for (int i = 0; i < pagesUsed.size(); i++) {
+		if (temp != pagesUsed[i]) {
+			continue;
+		}
+		else{
+			return i + 1;
+		}
 	}
+	return -1;
+}
 
+int main() {
 	int avalablePageCount;
 	int maxMem;
 	int pageSize;
@@ -78,11 +69,27 @@ int main() {
 	list<int> inputQueue;
 	vector<Process> processVector;
 	map<int, list<MemEntry>> memEvents;
+	int mem_size;
+
+	cout << "Input memory size: ";
+	cin >> mem_size;
+	bool pagesizecheck = 0;
+
+	do {
+		cout << endl << "Input page size: (100, 200, 400):";
+		cin >> pageSize;
+
+				if (pageSize != 100 || pageSize != 200 || pageSize != 400){
+					cout << "Invalid page size entry. Try again!\n";
+					pagesizecheck = 0;
+					}
+				if (pageSize == 100 || pageSize == 200 || pageSize == 400){
+					pagesizecheck = 1;
+				}
+		} while (pagesizecheck == 0);
+
 
 	maxMem = mem_size;
-	if (page_size == 1) pageSize = 100;
-	else if (page_size == 2) pageSize = 200;
-	else pageSize = 400;
 	avalablePageCount = maxMem / pageSize;
 	memMap = vector<int>(avalablePageCount, -1);
 
@@ -232,7 +239,7 @@ int main() {
 							}
 						}
 						cout << endl;
-					//} // end of print_mem
+					// end of print_mem
 				}
 				else
 					++frontIterator;
@@ -241,8 +248,8 @@ int main() {
 	}
 
 	double total = 0;
-	size_t size = processVector.size();
-	for (size_t i = 0; i < size; i++) {
+	int size = processVector.size();
+	for (int i = 0; i < size; i++) {
 		total += (processVector[i].pEndTime - processVector[i].pArrivalTime);
 	}
 	cout << "Average Turnaround Time: " << total / size << endl;
