@@ -2,7 +2,7 @@
 ## Programmed in C++
 ## Coded by:
 * Justin Drouin - jdrouin@csu.fullerton.edu
-* #
+* Russell Guillermo - rguillermo3@csu.fullerton.edu
 * #
 
 ### How To Run:
