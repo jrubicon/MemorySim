@@ -79,7 +79,7 @@ int main() {
 				else{
 					pagesizecheck = 1;
 				}
-		} while (pagesizecheck != 1);
+		} while (pagesizecheck = 0);
 
 	int avalablePageCount;
 	int maxMem;
