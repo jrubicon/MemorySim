@@ -1,9 +1,9 @@
 # Memory simulator
 ## Programmed in C++
 ## Coded by:
-..* Justin Drouin - jdrouin@csu.fullerton.edu
-..*
-..*
+* Justin Drouin - jdrouin@csu.fullerton.edu
+* #
+* #
 
 ### How To Run:
 1. Open Terminal
