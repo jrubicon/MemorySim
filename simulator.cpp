@@ -62,25 +62,6 @@ int Process::findPage(int temp) {
 }
 
 int main() {
-	int mem_size, page_size;
-
-	cout << "Input memory size: ";
-	cin >> mem_size;
-	bool pagesizecheck = 0;
-
-	do {
-		cout << endl << "Input page size: (100, 200, 400): ";
-		cin >> page_size;
-
-				if (page_size != 100 || page_size != 200 || page_size != 400){
-					cout << "Invalid page size entry. Try again!\n";
-					pagesizecheck = 0;
-					}
-				else{
-					pagesizecheck = 1;
-				}
-		} while (pagesizecheck = 0);
-
 	int avalablePageCount;
 	int maxMem;
 	int pageSize;
@@ -88,6 +69,25 @@ int main() {
 	list<int> inputQueue;
 	vector<Process> processVector;
 	map<int, list<MemEntry>> memEvents;
+	int mem_size;
+
+	cout << "Input memory size: ";
+	cin >> mem_size;
+	bool pagesizecheck = 0;
+
+	do {
+		cout << endl << "Input page size: (100, 200, 400):";
+		cin >> pageSize;
+
+				if (pageSize != 100 || pageSize != 200 || pageSize != 400){
+					cout << "Invalid page size entry. Try again!\n";
+					pagesizecheck = 0;
+					}
+				if (pageSize == 100 || pageSize == 200 || pageSize == 400){
+					pagesizecheck = 1;
+				}
+		} while (pagesizecheck == 0);
+
 
 	maxMem = mem_size;
 	avalablePageCount = maxMem / pageSize;
