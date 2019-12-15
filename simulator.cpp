@@ -237,7 +237,7 @@ int main() {
 							}
 						}
 						cout << endl;
-					// end of print_mem
+					// end of print memory map
 				}
 				else
 					++frontIterator;
