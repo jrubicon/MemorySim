@@ -73,10 +73,8 @@ int main() {
 	cin >> mem_size;
 	bool pagesizecheck = 0;
 
-	do {
-		cout << endl << "Input page size: (100, 200, 400):";
-		cin >> pageSize;
-
+	do {cout << endl << "Input page size: (100, 200, 400):";
+			cin >> pageSize;
 				if (pageSize != 100 || pageSize != 200 || pageSize != 400){
 					cout << "Invalid page size entry. Try again!\n";
 					pagesizecheck = 0;
@@ -136,22 +134,22 @@ int main() {
 								frontIterator++;
 							}
 							cout << "]" << "\n\t";
-				}//
+				}
 				else {
 						// removing from memory map
 						int pComplete = trigger.pNum + 1;
 						cout << "Process " << pComplete << " completes" << "\n\t";
 						processVector[trigger.pNum].pEndTime = t;
-						size_t size = processVector[trigger.pNum].pagesUsed.size();
-						for (size_t i = 0; i < size; i++)
+						int size = processVector[trigger.pNum].pagesUsed.size();
+						for (int i = 0; i < size; i++)
 							memMap[processVector[trigger.pNum].pagesUsed[i]] = -1;
 						avalablePageCount = avalablePageCount + size;
 
 						// printing memory
-							size_t mem_size = memMap.size();
+							int mem_size = memMap.size();
 							int head, tail;
 							cout << "Memory Map: ";
-							for (size_t i = 0; i < mem_size; i++) {
+							for (int i = 0; i < mem_size; i++) {
 								if (memMap[i] != -1) {
 									int curPHead = i * pageSize;
 									int curPTail = i * pageSize + pageSize -1;
@@ -160,8 +158,7 @@ int main() {
 										processVector[memMap[i]].findPage(i) << "\n\t\t";
 								}
 								else { // if page is empty loop til we find a filled page
-									head = i;
-									tail = i;
+									head = tail = i;
 									while (i < mem_size && memMap[i] == -1) {
 										tail = i;
 										i++;
@@ -184,7 +181,7 @@ int main() {
 				if (processVector[*frontIterator].pageRequired(pageSize) <= avalablePageCount) { //if enough space add to mem, if not check next
 
 						cout << "\tMM moves Process " << *frontIterator + 1 << " to memory" << "\n\t\t";
-						size_t size = processVector[*frontIterator].pageRequired(pageSize);
+						int size = processVector[*frontIterator].pageRequired(pageSize);
 						avalablePageCount -= size;
 						int i = 0;
 
@@ -221,18 +218,17 @@ int main() {
 						cout << "]" << "\n\t";
 					// end of printing queue
 
-						size_t mem_size = memMap.size();
+						int mem_size = memMap.size();
 						int head, tail;
 						cout << "Memory Map: ";
-						for (size_t i = 0; i < mem_size; i++) {
+						for (int i = 0; i < mem_size; i++) {
 							if (memMap[i] != -1) {
 								cout << i * pageSize << " - " << i * pageSize + pageSize -1 <<
 									": Process " << memMap[i] + 1 << ", Page " <<
 									processVector[memMap[i]].findPage(i) << "\n\t\t";
 							}
 							else { // loops to fill page
-								head = i;
-								tail = i;
+								head = tail = i;
 								while (i < mem_size && memMap[i] == -1) {
 									tail = i;
 									i++;
@@ -242,7 +238,7 @@ int main() {
 							}
 						}
 						cout << endl;
-					// end of print_mem
+					// end of print memory map
 				}
 				else
 					++frontIterator;
